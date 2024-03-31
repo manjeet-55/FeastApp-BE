@@ -7,7 +7,8 @@ import {
   userModel,
   userPoolModel,
 } from "../../models";
-import { HttpStatusCode } from "../../utils/types";
+import { AuthorizedRequest, HttpStatusCode } from "../../utils/types";
+import { Request, Response } from "express";
 
 const mealBookFucntion = async (email: string, date: string, bookedBy: string) => {
   try {
@@ -65,8 +66,7 @@ const mealBookFucntion = async (email: string, date: string, bookedBy: string) =
   }
 };
 
-//Done
-const bookYourMeal = async (request, response) => {
+const bookYourMeal = async (request: Request, response: Response) => {
   try {
     const { email, date, bookedBy } = request.body;
     if (!email || !date || !bookedBy) {
@@ -91,8 +91,8 @@ const bookYourMeal = async (request, response) => {
   }
 };
 
-//Done
-const bookMultipleMeals = async (request, response) => {
+
+const bookMultipleMeals = async (request: Request, response: Response) => {
   try {
     const { email, dates, bookedBy } = request.body;
     const bookedByUser = await userModel.findOne({ email: bookedBy });
@@ -142,8 +142,8 @@ const bookMultipleMeals = async (request, response) => {
   }
 };
 
-//Done
-const cancelMeal = async (request, response) => {
+
+const cancelMeal = async (request: Request, response: Response) => {
   try {
     const { email, date } = request.body;
     const user = await userModel.findOne({ email });
@@ -171,8 +171,8 @@ const cancelMeal = async (request, response) => {
   }
 };
 
-//Done
-const updateMealStatus = async (request, response) => {
+
+const updateMealStatus = async (request: Request, response: Response) => {
   try {
     const { email, date } = request.body;
     const user = await userModel.findOne({ email });
@@ -205,11 +205,11 @@ const updateMealStatus = async (request, response) => {
   }
 };
 
-//Done
-const getCountsOfUser = async (request, response) => {
+
+const getCountsOfUser = async (request: Request, response: Response) => {
   try {
     const { email } = request.query;
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email: email as string });
     if (!user) {
       return sendErrorResponse(HttpStatusCode.BAD_REQUEST, messageResponse.INVALID_USER, response);
     }
@@ -233,8 +233,8 @@ const getCountsOfUser = async (request, response) => {
   }
 };
 
-//Done
-const getAllCountOfDate = async (request, response) => {
+
+const getAllCountOfDate = async (request: Request, response: Response) => {
   try {
     const { date } = request.body;
     const { location } = request.query;
@@ -297,8 +297,8 @@ const getAllCountOfDate = async (request, response) => {
   }
 };
 
-//Done
-const getLastFiveCounts = async (request, response) => {
+
+const getLastFiveCounts = async (request: Request, response: Response) => {
   try {
     const { location } = request.query;
     const lastFiveDay = [];
@@ -333,7 +333,7 @@ const getLastFiveCounts = async (request, response) => {
   }
 };
 
-//Done
+
 const getDayByDate = (dateToBeUsed: string) => {
   const date = new Date(dateToBeUsed);
   const options: Intl.DateTimeFormatOptions = { weekday: "long" };
@@ -341,7 +341,7 @@ const getDayByDate = (dateToBeUsed: string) => {
   return dayName;
 };
 
-//Done
+
 const getCounts = async (date, location) => {
   const foundUsers = await mealModel.find({
     bookedDates: { $elemMatch: { date: date } },
@@ -365,8 +365,8 @@ const getCounts = async (date, location) => {
   return count;
 };
 
-//Done
-const cancelAllMealsOfDate = async (request, response) => {
+
+const cancelAllMealsOfDate = async (request: Request, response: Response) => {
   try {
     const { date } = request.query;
     const foundUsers = await mealModel.find({
@@ -390,8 +390,8 @@ const cancelAllMealsOfDate = async (request, response) => {
   }
 };
 
-//Done
-const getTodayNotCountedUsers = async (request, response) => {
+
+const getTodayNotCountedUsers = async (request: Request, response: Response) => {
   try {
     const today = new Date();
     const day = new Date(today);
@@ -419,8 +419,8 @@ const getTodayNotCountedUsers = async (request, response) => {
   }
 };
 
-//Done
-const getMonthlyCounts = async (request, response) => {
+
+const getMonthlyCounts = async (request: Request, response: Response) => {
   try {
     const { location } = request.query;
     const today = new Date();
@@ -464,8 +464,7 @@ const getMonthlyCounts = async (request, response) => {
   }
 };
 
-//Done
-const handleMissedCount = async (request, response) => {
+const handleMissedCount = async (request: Request, response: Response) => {
   try {
     const { location } = request.query;
     const { date, email } = request.body;
@@ -473,7 +472,7 @@ const handleMissedCount = async (request, response) => {
     if (!user) {
       return sendErrorResponse(HttpStatusCode.BAD_REQUEST, messageResponse.INVALID_USER, response);
     }
-    let missedCountEntity = await missedCount.findOne({ date, location });
+    let missedCountEntity = await missedCount.findOne({ date, location: location as string });
     if (!missedCountEntity) {
       missedCountEntity = new missedCount({
         date,
@@ -498,10 +497,13 @@ const handleMissedCount = async (request, response) => {
   }
 };
 
-const getMissedCounts = async (request, response) => {
+const getMissedCounts = async (request: Request, response: Response) => {
   try {
     const { date, location } = request.query;
-    const foundMissedCount = await missedCount.findOne({ date, location });
+    const foundMissedCount = await missedCount.findOne({
+      date: date as string,
+      location: location as string,
+    });
     const countOfDate = await getCounts(date, location);
     let countsMissed: any = foundMissedCount?.users.filter(
       ({ email }) => !countOfDate.find((obj) => obj.email === email),
@@ -530,7 +532,7 @@ const getMissedCounts = async (request, response) => {
   }
 };
 
-const bookForGuest = async (request, response) => {
+const bookForGuest = async (request: AuthorizedRequest, response: Response) => {
   try {
     const { guestType, location } = request.query;
     const { email: bookedByEmail } = request.user;
@@ -546,7 +548,7 @@ const bookForGuest = async (request, response) => {
           response,
         );
       }
-      guest = await guestModel.findOne({ email, location });
+      guest = await guestModel.findOne({ email, location: location as string });
       if (guest) {
         dates.map((date) => {
           guest.bookedDates.push({
@@ -599,7 +601,7 @@ const bookForGuest = async (request, response) => {
   }
 };
 
-const cancelGuestMeal = async (request, response) => {
+const cancelGuestMeal = async (request: Request, response: Response) => {
   try {
     const { guestType, location } = request.query;
     if (guestType === "employee") {
@@ -612,7 +614,7 @@ const cancelGuestMeal = async (request, response) => {
           response,
         );
       }
-      const mealFound = await guestModel.findOne({ email, location });
+      const mealFound = await guestModel.findOne({ email, location: location as string });
       if (!mealFound) {
         return sendErrorResponse(
           HttpStatusCode.NOT_FOUND,
@@ -634,7 +636,7 @@ const cancelGuestMeal = async (request, response) => {
       return sendErrorResponse(HttpStatusCode.NOT_FOUND, messageResponse.MEAL_NOT_BOOKED, response);
     } else if (guestType === "nonEmployee") {
       const { guestId, date } = request.body;
-      const guest = await guestModel.findOne({ _id: guestId, location });
+      const guest = await guestModel.findOne({ _id: guestId, location: location as string });
       if (!guest) {
         return sendErrorResponse(
           HttpStatusCode.NOT_FOUND,
