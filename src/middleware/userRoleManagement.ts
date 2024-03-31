@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import messageResponse from "../utils/constants.js";
-import config from "../utils/config.js";
-import { userModel } from "../models/index.js";
-import jwt from "../utils/jwt.js";
-import { sendErrorResponse } from "../utils/response.js";
+import { messageResponse, config, jwt, sendErrorResponse } from "../utils";
+import { userModel } from "../models/index";
 
 export const isAdmin = async (request: Request, response: Response, next: NextFunction) => {
   try {
