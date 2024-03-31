@@ -1,11 +1,22 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-export const MONGO_URI = process.env.MONGO_URI;
-export const SECRET = process.env.SECRET;
-export const JWT_EXPIRY = 2592000;
-export const EMAIL_API_KEY = process.env.EMAIL_API_KEY;
-export const SENDER_EMAIL = process.env.SENDER_EMAIL;
-export const PORT = process.env.PORT;
-export const USERPOOL_MONGO_URI = process.env.USERPOOL_MONGO_URI;
-export const RESET_PASSWORD_URL = process.env.RESET_PASSWORD_URL;
+const MONGO_URI = process.env.MONGO_URI;
+const SECRET = process.env.SECRET;
+const JWT_EXPIRY = 2592000;
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY;
+const SENDER_EMAIL = process.env.SENDER_EMAIL;
+const PORT = process.env.PORT;
+const USERPOOL_MONGO_URI = process.env.USERPOOL_MONGO_URI;
+const RESET_PASSWORD_URL = process.env.RESET_PASSWORD_URL;
+
+export default {
+  MONGO_URI,
+  SECRET,
+  JWT_EXPIRY,
+  EMAIL_API_KEY,
+  SENDER_EMAIL,
+  PORT,
+  USERPOOL_MONGO_URI,
+  RESET_PASSWORD_URL,
+};

@@ -8,7 +8,7 @@
     "start": "node dist/index.js",
     "build": "tsc -w",
     "dev2": "concurrently \"tsc -w\"  \"nodemon dist/index.js\"",
-    "dev3":"ts-node src/index.ts"
+    "dev3": "ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -22,7 +22,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "sib-api-v3-sdk": "^8.5.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
