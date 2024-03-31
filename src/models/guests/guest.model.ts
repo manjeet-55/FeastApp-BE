@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
+import { Schema } from "mongoose";
 import { db } from "../../database";
+import { bookedDateSchema } from "../meal";
 
-const guestSchema = new mongoose.Schema(
+const guestSchema = new Schema(
   {
     email: {
       type: String,
@@ -11,23 +12,7 @@ const guestSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    bookedDates: [
-      {
-        date: {
-          type: String,
-        },
-        mealTaken: {
-          type: Boolean,
-          default: false,
-        },
-        bookedBy: {
-          type: String,
-        },
-        bookedByEmail: {
-          type: String,
-        },
-      },
-    ],
+    bookedDates: [bookedDateSchema],
   },
   {
     timestamps: true,

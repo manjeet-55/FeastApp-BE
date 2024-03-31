@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import config from "../utils/config";
+import { config } from "../utils";
 
 export const db = mongoose.createConnection(config.MONGO_URI);
 console.log("db connectinstance", db);
