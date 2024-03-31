@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import { jwt, messageResponse, sendErrorResponse, config } from "../utils";
 import { AuthorizedRequest } from "../utils/types";
-const auth = (request: AuthorizedRequest, response: Response, next: NextFunction) => {
+export const Auth = (request: AuthorizedRequest, response: Response, next: NextFunction) => {
   const token = request?.headers["authorization"]?.split(" ")[1];
   if (!token) {
     return sendErrorResponse(403, messageResponse.PAGE_NOT_FOUND, response);
@@ -16,4 +16,4 @@ const auth = (request: AuthorizedRequest, response: Response, next: NextFunction
   }
 };
 
-export default auth;
+

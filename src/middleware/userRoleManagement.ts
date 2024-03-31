@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import messageResponse from "./constants";
-import config from "./config";
+import messageResponse from "../utils/constants.js";
+import config from "../utils/config.js";
 import { userModel } from "../models/index.js";
-import jwt from "./jwt.js";
-import {sendErrorResponse } from "./response";
+import jwt from "../utils/jwt.js";
+import { sendErrorResponse } from "../utils/response.js";
 
-const isAdmin = async (request: Request, response: Response, next: NextFunction) => {
+export const isAdmin = async (request: Request, response: Response, next: NextFunction) => {
   try {
     const token = request.headers["authorization"]?.split(" ")[1];
     if (!token) {
@@ -21,5 +21,3 @@ const isAdmin = async (request: Request, response: Response, next: NextFunction)
     return sendErrorResponse(500, messageResponse.ERROR_FETCHING_DATA, response);
   }
 };
-
-export default isAdmin;
