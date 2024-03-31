@@ -4,6 +4,7 @@ import jwt from "./jwt";
 import sendEmail from "./sendEmail";
 import passwordUtils from "./password";
 import config from "./config";
+import { globalCatch } from "./globalCatch";
 export {
   config,
   sendResponse,
@@ -12,4 +13,5 @@ export {
   jwt,
   sendEmail,
   passwordUtils,
+  globalCatch
 };

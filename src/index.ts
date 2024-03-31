@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 import unauthorized from "../src/routes/unprotected";
 import authorized from "../src/routes/protected";
 import { Auth } from "./middleware";
-app.listen(8000, () => {
+import { config } from "../src/utils";
+app.listen(config.PORT, () => {
   console.log("server listening ");
 });
 app.get("/", (req: Request, res: Response) => {
